@@ -1,4 +1,4 @@
-package edu.iu.habahram.GumballMachine;
+package edu.iu.stffrenc.GumballMachine;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

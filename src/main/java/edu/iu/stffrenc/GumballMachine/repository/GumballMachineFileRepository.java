@@ -1,8 +1,7 @@
-package edu.iu.habahram.GumballMachine.repository;
+package edu.iu.stffrenc.GumballMachine.repository;
 
-import edu.iu.habahram.GumballMachine.model.GumballMachine;
-import edu.iu.habahram.GumballMachine.model.GumballMachineRecord;
-import edu.iu.habahram.GumballMachine.model.GumballMachineState;
+import edu.iu.stffrenc.GumballMachine.model.GumballMachineRecord;
+import edu.iu.stffrenc.GumballMachine.model.GumballMachineState;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;

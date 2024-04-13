@@ -1,6 +1,6 @@
-package edu.iu.habahram.GumballMachine.repository;
+package edu.iu.stffrenc.GumballMachine.repository;
 
-import edu.iu.habahram.GumballMachine.model.GumballMachineRecord;
+import edu.iu.stffrenc.GumballMachine.model.GumballMachineRecord;
 
 import java.io.IOException;
 import java.util.List;

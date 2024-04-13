@@ -8,7 +8,7 @@
 		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>edu.iu.habahram</groupId>
+	<groupId>edu.iu.stffrenc</groupId>
 	<artifactId>Gumball-Machine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Gumball-Machine</name>

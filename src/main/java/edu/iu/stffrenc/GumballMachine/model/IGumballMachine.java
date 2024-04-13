@@ -1,4 +1,4 @@
-package edu.iu.habahram.GumballMachine.model;
+package edu.iu.stffrenc.GumballMachine.model;
 
 public interface IGumballMachine {
     TransitionResult insertQuarter();

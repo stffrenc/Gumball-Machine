@@ -1,7 +1,5 @@
-package edu.iu.habahram.GumballMachine.model;
+package edu.iu.stffrenc.GumballMachine.model;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public final class GumballMachineRecord {
