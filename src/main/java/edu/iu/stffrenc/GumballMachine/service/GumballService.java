@@ -6,9 +6,8 @@ import edu.iu.stffrenc.GumballMachine.model.IGumballMachine;
 import edu.iu.stffrenc.GumballMachine.model.TransitionResult;
 import edu.iu.stffrenc.GumballMachine.repository.IGumballRepository;
 import org.springframework.stereotype.Service;
-
+import java.util.*;
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public class GumballService implements IGumballService{
@@ -55,10 +54,23 @@ public class GumballService implements IGumballService{
             record.setCount(result.countAfter());
             save(record);
         }
+        dispense(id);
         return result;
     }
 
-    
+
+    @Override
+    public TransitionResult dispense(String id) throws IOException{
+        GumballMachineRecord record = gumballRepository.findById(id);
+        IGumballMachine machine = new GumballMachine(record.getId(), record.getState(), record.getCount());
+        TransitionResult result = machine.releaseBall();
+        if(result.succeeded()) {
+            record.setState(result.stateAfter());
+            record.setCount(result.countAfter());
+            save(record);
+        }
+        return result;
+    }
 
     @Override
     public List<GumballMachineRecord> findAll() throws IOException {

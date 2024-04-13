@@ -15,58 +15,38 @@ public class GumballMachine implements IGumballMachine {
         this.count = count;
     }
 
+    private TransitionResult handleAction(boolean canProceed, String successState, String successMessage) {
+        if (state.equalsIgnoreCase(SOLD_OUT)) {
+            return new TransitionResult(false, "Machine is sold out", state, count);
+        } else if (state.equalsIgnoreCase(SOLD)) {
+            return new TransitionResult(false, "Please wait, we're already giving you a gumball", state, count);
+        } else if (canProceed) {
+            state = successState;
+            return new TransitionResult(true, successMessage, state, count);
+        } else {
+            String message = "Invalid action";
+            if (state.equalsIgnoreCase(NO_QUARTER)) {
+                message = "There is no quarter";
+            } else if (state.equalsIgnoreCase(HAS_QUARTER)) {
+                message = "Quarter already inserted";
+            }
+            return new TransitionResult(false, message, state, count);
+        }
+    }
+
     @Override
     public TransitionResult insertQuarter() {
-        boolean succeeded = false;
-        String message = "";
-        if (state.equalsIgnoreCase(HAS_QUARTER)) {
-            message = "You can't insert another quarter";
-        } else if (state.equalsIgnoreCase(NO_QUARTER)) {
-            state = HAS_QUARTER;
-            message = "You inserted a quarter";
-            succeeded = true;
-        } else if (state.equalsIgnoreCase(SOLD_OUT)) {
-            message = "You can't insert a quarter, the machine is sold out";
-        } else if (state.equalsIgnoreCase(SOLD)) {
-            message = "Please wait, we're already giving you a gumball";
-        }
-        return new TransitionResult(succeeded, message, state, count);
+        return handleAction(state.equalsIgnoreCase(NO_QUARTER), HAS_QUARTER, "You inserted a quarter");
     }
 
     @Override
     public TransitionResult ejectQuarter() {
-        boolean succeeded = false;
-        String message = "";
-        if (state.equalsIgnoreCase(HAS_QUARTER)){
-            state = NO_QUARTER;
-            message = "You ejected a quarter";
-            succeeded = true;
-        } else if(state.equalsIgnoreCase(NO_QUARTER)){
-            message = "There is no quarter to eject";
-        } else if(state.equalsIgnoreCase(SOLD_OUT)){
-            message = "You can't eject a quarter, the machine is sold out";
-        } else if (state.equalsIgnoreCase(SOLD)){
-            message = "Please wait, we're already giving you a gumball";
-        }
-        return new TransitionResult(succeeded, message, state, count);
+        return handleAction(state.equalsIgnoreCase(HAS_QUARTER), NO_QUARTER, "You ejected a quarter");
     }
 
     @Override
     public TransitionResult turnCrank() {
-        boolean succeeded = false;
-        String message = "";
-        if (state.equalsIgnoreCase(HAS_QUARTER)){
-            state = SOLD;
-            message = "You turned the crank";
-            succeeded = true;
-        } else if(state.equalsIgnoreCase(NO_QUARTER)){
-            message = "There is no quarter";
-        } else if(state.equalsIgnoreCase(SOLD_OUT)){
-            message = "You can't turn the crank, the machine is sold out";
-        } else if(state.equalsIgnoreCase(SOLD)){
-            message = "Please wait, we're already giving you a gumball";
-        }
-        return new TransitionResult(succeeded, message, state, count);
+        return handleAction(state.equalsIgnoreCase(HAS_QUARTER), SOLD, "You turned the crank");
     }
 
     @Override
@@ -85,9 +65,13 @@ public class GumballMachine implements IGumballMachine {
     }
 
     @Override
-    public void releaseBall() {
-
+    public TransitionResult releaseBall() {
+        if (state.equalsIgnoreCase(SOLD)) {
+            state = NO_QUARTER;
+            count--;
+            return new TransitionResult(true, "Dispensing gumball", state, count);
+        } else {
+            return new TransitionResult(false, "You didn't turn the crank", state, count);
+        }
     }
-
-
 }
