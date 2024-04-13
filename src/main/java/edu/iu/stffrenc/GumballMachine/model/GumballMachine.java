@@ -85,8 +85,21 @@ public class GumballMachine implements IGumballMachine {
     }
 
     @Override
-    public void releaseBall() {
-
+    public TransitionResult releaseBall() {
+        boolean succeeded = false;
+        String message = "";
+        if (state.equalsIgnoreCase(HAS_QUARTER)){
+            message = "You didn't turn the crank";
+        } else if(state.equalsIgnoreCase(NO_QUARTER)){
+            message = "There is no quarter";
+        } else if(state.equalsIgnoreCase(SOLD_OUT)){
+            message = "You can't turn the crank, the machine is sold out";
+        } else if(state.equalsIgnoreCase(SOLD)){
+            state = NO_QUARTER;
+            message = "Dispensing gumball";
+            succeeded = true;
+        }
+        return new TransitionResult(succeeded, message, state, count--);
     }
 
 
