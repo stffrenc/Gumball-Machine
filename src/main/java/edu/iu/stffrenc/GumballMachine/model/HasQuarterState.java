@@ -27,6 +27,14 @@ public class HasQuarterState implements IState{
         int count = gumballMachine.getCount();
         return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), count);
     }
+
+    @Override
+    public TransitionResult refill() {
+        String message = "Gumball Machine is refilled.";
+        boolean succeeded = true;
+        return new TransitionResult(succeeded, message, gumballMachine.getTheStateName(), gumballMachine.getCount());
+    }
+
     @Override
     public TransitionResult dispense() {
         String message = "You need to turn crank first";

@@ -1,5 +1,7 @@
 package edu.iu.stffrenc.GumballMachine.model;
 
+import java.io.IOException;
+
 public class GumballMachine implements IGumballMachine {
     final String SOLD_OUT = GumballMachineState.OUT_OF_GUMBALLS.name();
     final String NO_QUARTER = GumballMachineState.NO_QUARTER.name();
@@ -61,6 +63,11 @@ public class GumballMachine implements IGumballMachine {
 
     @Override
     public String getTheStateName() {
+        return null;
+    }
+
+    @Override
+    public TransitionResult refill() throws IOException {
         return null;
     }
 

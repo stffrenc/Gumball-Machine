@@ -1,5 +1,7 @@
 package edu.iu.stffrenc.GumballMachine.model;
 
+import java.io.IOException;
+
 public class GumballMachine2 implements IGumballMachine{
     String id;
     IState soldOutState;
@@ -25,6 +27,10 @@ public class GumballMachine2 implements IGumballMachine{
         return state.getTheName();
     }
 
+    @Override
+    public TransitionResult refill() throws IOException {
+        return null;
+    }
 
 
     public void setState(IState state) {
@@ -61,6 +67,11 @@ public class GumballMachine2 implements IGumballMachine{
     @Override
     public TransitionResult releaseBall() {
         return state.dispense();
+    }
+
+    public TransitionResult refill(int refill) {
+        count = count + refill;
+        return new TransitionResult(true, "Machine is refilled", state.getTheName(), count);
     }
 
     @Override

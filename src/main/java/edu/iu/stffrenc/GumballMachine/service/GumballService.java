@@ -1,9 +1,6 @@
 package edu.iu.stffrenc.GumballMachine.service;
 
-import edu.iu.stffrenc.GumballMachine.model.GumballMachine;
-import edu.iu.stffrenc.GumballMachine.model.GumballMachineRecord;
-import edu.iu.stffrenc.GumballMachine.model.IGumballMachine;
-import edu.iu.stffrenc.GumballMachine.model.TransitionResult;
+import edu.iu.stffrenc.GumballMachine.model.*;
 import edu.iu.stffrenc.GumballMachine.repository.IGumballRepository;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -23,6 +20,34 @@ public class GumballService implements IGumballService{
         GumballMachineRecord record = gumballRepository.findById(id);
         IGumballMachine machine = new GumballMachine(record.getId(), record.getState(), record.getCount());
         TransitionResult result = machine.insertQuarter();
+        if(result.succeeded()) {
+            record.setState(result.stateAfter());
+            record.setCount(result.countAfter());
+            save(record);
+        }
+        return result;
+    }
+
+    private TransitionResult runTheMachine(IGumballMachine machine, TransitionE action) {
+        switch (action) {
+            case INSERT_QUARTER -> {
+                return machine.insertQuarter();
+            }
+            case EJECT_QUARTER -> {
+                return machine.ejectQuarter();
+            }
+            case TURN_CRANK -> {
+                return machine.turnCrank();
+            }
+        }
+        return null;
+    }
+
+
+    private TransitionResult transit(String id, TransitionE action) throws IOException {
+        GumballMachineRecord record = gumballRepository.findById(id);
+        IGumballMachine machine = new GumballMachine2(record.getId(), record.getState(), record.getCount());
+        TransitionResult result = runTheMachine(machine, action);
         if(result.succeeded()) {
             record.setState(result.stateAfter());
             record.setCount(result.countAfter());
@@ -86,4 +111,14 @@ public class GumballService implements IGumballService{
     public String save(GumballMachineRecord gumballMachineRecord) throws IOException {
         return gumballRepository.save(gumballMachineRecord);
     }
+
+    public TransitionResult refill(String id, int count) {
+        try {
+            return transit(id, TransitionE.REFILL);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
